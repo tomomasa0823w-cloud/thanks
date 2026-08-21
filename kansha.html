@@ -17,4 +17,209 @@
     color:var(--ink);
     background:radial-gradient(1200px 400px at 100% -10%, var(--leaf), transparent 60%),var(--cream);
     -webkit-font-smoothing:antialiased;line-height:1.6;
-    padding:0 16px
+    padding:0 16px calc(28px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:520px;margin:0 auto}
+  header{padding:24px 4px 8px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--green2);font-weight:700;margin:0 0 6px}
+  h1{font-size:25px;margin:0;color:var(--green)}
+  .lead{margin:8px 2px 0;color:var(--muted);font-size:13.5px}
+  .screen{display:none}
+  .screen.active{display:block}
+
+  .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .who{background:#fff;border:2px solid var(--line);border-radius:14px;padding:16px 12px;
+    font:inherit;font-weight:700;font-size:16px;color:var(--green);cursor:pointer;text-align:center}
+  .who:active{background:var(--leaf);border-color:var(--green3)}
+
+  .progwrap{margin:16px 0 6px}
+  .progtop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .progtop b{color:var(--green);font-size:15px}
+  .progtop .num{color:var(--green2);font-weight:700;font-size:14px}
+  .progbar{height:12px;background:var(--leaf);border-radius:999px;overflow:hidden}
+  .progbar>i{display:block;height:100%;background:var(--green3);width:0;transition:width .35s}
+  .allclear{background:var(--leaf);border:1.5px solid var(--green3);border-radius:12px;
+    padding:12px 14px;color:var(--green);font-weight:700;margin:12px 0;text-align:center;display:none}
+  .allclear.show{display:block}
+
+  .list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+  .rcp{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line);
+    border-radius:14px;padding:14px;cursor:pointer}
+  .rcp:active{background:#F3F8EC}
+  .rcp .nm{font-weight:700;font-size:17px;flex:1}
+  .rcp .badge{font-size:12px;font-weight:700;border-radius:999px;padding:5px 11px}
+  .rcp .badge.todo{background:#FFF3E0;color:#B4761A}
+  .rcp .badge.ok{background:var(--leaf);color:var(--green)}
+  .rcp.ok{border-color:var(--green3)}
+  .rcp.ok .nm{color:var(--green2)}
+  .rowbtns{display:flex;gap:10px;margin:16px 0 4px}
+  .link{background:none;border:none;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer;padding:6px}
+
+  .preview{position:relative;margin:6px 0 18px;background:#fff;border:2px solid var(--green);
+    border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(55,86,35,.14)}
+  .preview .band{background:var(--green);color:#fff;font-weight:700;padding:9px 16px;
+    display:flex;align-items:center;gap:8px;letter-spacing:.06em}
+  .preview .body{padding:16px 18px;min-height:140px;display:flex;flex-direction:column;gap:10px}
+  .pv-to{font-size:18px;font-weight:700}
+  .pv-to .name{color:var(--green2);border-bottom:2px solid var(--leaf);padding:0 4px}
+  .pv-msg{flex:1;font-size:15.5px;white-space:pre-wrap}
+  .pv-msg.empty{color:#B9C6A9}
+  .pv-from{text-align:right;font-weight:700;color:var(--green)}
+  .pv-from .name{border-bottom:2px solid var(--leaf);padding:0 4px}
+  textarea{width:100%;font:inherit;color:var(--ink);background:#fff;border:1.5px solid var(--line);
+    border-radius:12px;padding:13px 14px;min-height:100px;resize:vertical}
+  textarea:focus{outline:3px solid var(--leaf);border-color:var(--green3)}
+  label.fl{display:block;font-weight:700;font-size:14px;margin:2px 0 6px;color:var(--green)}
+  .btn{font:inherit;font-weight:700;border-radius:14px;padding:15px;cursor:pointer;border:2px solid var(--green);width:100%}
+  .btn.primary{background:var(--green);color:#fff;font-size:17px;box-shadow:0 8px 18px rgba(55,86,35,.28)}
+  .btn.primary:disabled{opacity:.55;box-shadow:none}
+  .btn.ghost{background:#fff;color:var(--green);font-size:15px;margin-top:10px}
+  .writehead{display:flex;align-items:baseline;justify-content:space-between;margin-top:8px}
+  .writehead b{color:var(--green);font-size:16px}
+  .writehead span{color:var(--muted);font-size:13px}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    background:var(--green);color:#fff;padding:12px 18px;border-radius:12px;font-weight:700;
+    opacity:0;pointer-events:none;transition:.3s;box-shadow:0 8px 22px rgba(0,0,0,.25);z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">神宮寺店 ＭＴワーク</p>
+    <h1>サンクスカード</h1>
+    <p class="lead">記入者を選んで、みんなに“ありがとう”を。全員ぶん書けたら完了です。</p>
+  </header>
+
+  <section class="screen active" id="scWho">
+    <p style="font-weight:700;color:var(--green);margin:14px 2px 0">まずは、あなたの名前を選んでください</p>
+    <div class="who-grid" id="whoGrid"></div>
+  </section>
+
+  <section class="screen" id="scList">
+    <div class="progwrap">
+      <div class="progtop"><b id="listTitle">◯◯さん → 全員へ</b><span class="num" id="progNum">0/0</span></div>
+      <div class="progbar"><i id="progFill"></i></div>
+    </div>
+    <div class="allclear" id="allClear">全員ぶん書けました！ありがとうございました</div>
+    <div class="list" id="rcpList"></div>
+    <div class="rowbtns">
+      <button class="link" id="changeWho">記入者を変える</button>
+      <button class="link" id="resetProg" style="margin-left:auto">この人の進捗をリセット</button>
+    </div>
+  </section>
+
+  <section class="screen" id="scWrite">
+    <div class="writehead"><b id="writeTo">◯◯さんへ</b><span id="writeFrom">from ◯◯</span></div>
+    <div class="preview" aria-hidden="true">
+      <div class="band">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-9.7-9C.7 8.6 2.4 5 6 5c2 0 3.2 1.1 4 2.3C10.8 6.1 12 5 14 5c3.6 0 5.3 3.6 3.7 7-2.2 4.4-9.7 9-9.7 9z"/></svg>
+        サンクスカード
+      </div>
+      <div class="body">
+        <div class="pv-to"><span class="name" id="pvTo">◯◯</span> さんへ</div>
+        <div class="pv-msg empty" id="pvMsg">△△してくれて助かった！ ありがとう</div>
+        <div class="pv-from">from <span class="name" id="pvFrom">◯◯</span></div>
+      </div>
+    </div>
+    <label class="fl" for="msg">ありがとうの内容（△△してくれて助かった…）</label>
+    <textarea id="msg" placeholder="例：急な欠員のとき、送迎を代わってくれて本当に助かった"></textarea>
+    <button class="btn primary" id="sendBtn" style="margin-top:12px">この人に送る</button>
+    <button class="btn ghost" id="backList">リストに戻る</button>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   設定：ここだけ編集（下の "..." の中に /exec のURLを貼る）
+   ============================================================ */
+const GAS_URL = "ここにGASのデプロイURLを貼る";
+const STAFF = ["宮﨑","楢原","名村","石山","濱崎","所村","東","栄田","中西","茂木","長谷","武田"];
+/* ============================================================ */
+
+let writer=null, current=null;
+const $=id=>document.getElementById(id);
+const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo({top:0});};
+
+const pkey=w=>'thanks_'+w;
+const loadDone=w=>{ try{return JSON.parse(localStorage.getItem(pkey(w))||'[]');}catch(e){return [];} };
+const saveDone=(w,arr)=>{ try{localStorage.setItem(pkey(w),JSON.stringify(arr));}catch(e){} };
+
+const grid=$('whoGrid');
+STAFF.forEach(n=>{
+  const b=document.createElement('button');
+  b.className='who'; b.textContent=n+' さん';
+  b.addEventListener('click',()=>{ writer=n; openList(); });
+  grid.appendChild(b);
+});
+
+function recipientsFor(w){ return STAFF.filter(n=>n!==w); }
+function openList(){
+  const rc=recipientsFor(writer);
+  const done=loadDone(writer).filter(n=>rc.includes(n));
+  $('listTitle').textContent=writer+' さん → 全員へ';
+  $('progNum').textContent=done.length+'/'+rc.length;
+  $('progFill').style.width=(rc.length?Math.round(done.length/rc.length*100):0)+'%';
+  $('allClear').classList.toggle('show', done.length===rc.length && rc.length>0);
+  const list=$('rcpList'); list.innerHTML='';
+  rc.forEach(n=>{
+    const ok=done.includes(n);
+    const el=document.createElement('div');
+    el.className='rcp'+(ok?' ok':'');
+    el.innerHTML='<span class="nm">'+n+' さん</span><span class="badge '+(ok?'ok':'todo')+'">'+(ok?'済 ✓':'未記入')+'</span>';
+    el.addEventListener('click',()=>openWrite(n));
+    list.appendChild(el);
+  });
+  show('scList');
+}
+$('changeWho').addEventListener('click',()=>{ writer=null; show('scWho'); });
+$('resetProg').addEventListener('click',()=>{
+  if(confirm(writer+' さんの進捗をリセットしますか？')){ saveDone(writer,[]); openList(); }
+});
+
+const msgEl=$('msg');
+function openWrite(recipient){
+  current=recipient;
+  $('writeTo').textContent=recipient+' さんへ';
+  $('writeFrom').textContent='from '+writer;
+  $('pvTo').textContent=recipient;
+  $('pvFrom').textContent=writer;
+  msgEl.value=''; syncPv();
+  show('scWrite'); msgEl.focus();
+}
+function syncPv(){
+  const v=msgEl.value.trim(); const m=$('pvMsg');
+  if(v){ m.textContent=msgEl.value; m.classList.remove('empty'); }
+  else { m.textContent='△△してくれて助かった！ ありがとう'; m.classList.add('empty'); }
+}
+msgEl.addEventListener('input',syncPv);
+$('backList').addEventListener('click',openList);
+
+$('sendBtn').addEventListener('click', async ()=>{
+  const message=msgEl.value.trim();
+  if(!message){ msgEl.focus(); return; }
+  const btn=$('sendBtn'); btn.disabled=true; btn.textContent='送信中…';
+  const data={ to:current, message, from:writer };
+  try{
+    await fetch(GAS_URL,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
+  }catch(e){}
+  const done=loadDone(writer);
+  if(!done.includes(current)) done.push(current);
+  saveDone(writer,done);
+  btn.disabled=false; btn.textContent='この人に送る';
+  toast(current+' さんへ 送信しました');
+  const remaining=recipientsFor(writer).filter(n=>!done.includes(n));
+  if(remaining.length){ openWrite(remaining[0]); }
+  else { openList(); }
+});
+
+let tT=null;
+function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('show');
+  clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('show'),1800); }
+</script>
+</body>
+</html>
